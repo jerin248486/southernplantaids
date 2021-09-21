@@ -1,0 +1,79 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!-- Image Search -->
+<!-- 
+<form action='imageSearch' method='GET'>
+    <button type='submit'> Cam Search</button>
+    </form> -->
+<input type="file" name="image" accept="image/*" capture="environment">
+
+<!--  Search box -->
+<div class="row">
+    <div class="col">
+        <div class="card card-body">
+            <form method="GET">
+                {{myFilter.form}}
+                <button class="btn btn-primary" type="submit">
+                        Search
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+ <div class="row">
+    {% for product in products %}
+
+     <div class="col-sm-4">
+         <img class="img-fluid" src="{{product.imageURL}}" alt="">
+        <div class="box-element product">
+            <h6><strong>{{product.name}}</strong></h6>
+            <hr>
+            <button data-product="{{product.id}}" data-action="add" class="btn btn-outline-secondary add-btn update-cart">Add to Cart</button>
+            <a class="btn btn-outline-success" href="#">View</a>
+            <h4 style="display: inline-block;float: right;">Rs. {{product.price|floatformat:2}}/-</h4>
+        </div> 
+
+     </div>
+
+     
+{% endfor %}
+
+
+</div>
+
+<script>
+const webcamElement = document.getElementById('webcam');
+const canvasElement = document.getElementById('canvas');
+const snapSoundElement = document.getElementById('snapSound');
+const webcam = new Webcam(webcamElement, 'user', canvasElement, snapSoundElement);
+
+webcam.start()
+   .then(result =>{
+      console.log("webcam started");
+   })
+   .catch(err => {
+       console.log(err);
+   });
+
+let picture = webcam.snap();
+document.querySelector('#download-photo').href = picture;
+
+webcam.stop()
+
+$('#cameraFlip').click(function() {
+    webcam.flip();
+    webcam.start();  
+});
+
+</script>
+
+{% endblock %}
